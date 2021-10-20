@@ -1,0 +1,76 @@
+# Definition for CI within GitLab
+# Note:
+#    Prefix any job name with a '.' to disable.
+#
+
+
+test-python2:
+  stage: unittest
+  script:
+    - make tests PYTHON=python2
+  dependencies: []
+  artifacts:
+    when: always
+    paths:
+      - artifacts
+    reports:
+      junit:
+        - artifacts/test-python2.xml
+
+
+# Python 3 tests don't quite work yet
+.test-python3:
+  stage: unittest
+  script:
+    - make tests PYTHON=python3
+  dependencies: []
+  artifacts:
+    when: always
+    paths:
+      - artifacts
+    reports:
+      junit:
+        - artifacts/test-python3.xml
+
+
+coverage:
+  stage: unittest
+  script:
+    - make coverage
+  dependencies: []
+  #coverage: '/^Overall Coverage: (\d+(?:\.\d+)?)%.*$/'
+  coverage: '/^fontqualifiers.* (\d+(?:\.\d+)?)%.*$/'
+
+
+.inttest-python2:
+  stage: inttest
+  script:
+    - make inttests PYTHON=python2
+  dependencies: []
+  artifacts:
+    when: always
+    paths:
+      - artifacts
+    reports:
+      junit:
+        - artifacts/inttest-python2.xml
+
+
+.inttest-python3:
+  stage: inttest
+  script:
+    - make inttests PYTHON=python3
+  dependencies: []
+  artifacts:
+    when: always
+    paths:
+      - artifacts
+    reports:
+      junit:
+        - artifacts/inttest-python3.xml
+
+
+#### Stages to execute ####
+stages:
+  - unittest
+#  - inttest
