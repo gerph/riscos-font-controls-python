@@ -1,0 +1,60 @@
+---
+# Automated build of the tests for the Font controls parser:
+
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on:
+#   * push or pull request on any branch.
+
+on:
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  test-python2and3:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Ensure that we have virtualenv and python 2.7/3
+        run: sudo apt-get install -y virtualenv python2.7 python3
+
+      - name: Run the Python 2 tests
+        run: make tests PYTHON=python2
+
+      # Python 3 tests don't work right now.
+      #- name: Run the Python 3 tests
+      #  run: make tests PYTHON=python3
+
+      - name: Report on the coverage
+        run: make coverage
+
+      - name: Fixup coverage for the coverage action
+        if: ${{ github.event_name == 'pull_request' }}
+        run: ./fixup-coverage.sh
+
+      - name: Python Coverage
+        uses: orgoro/coverage@v1
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          coverageFile: artifacts/coverage-orgoro.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: artifacts/test-*.xml
+
+      - name: Upload the test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results
+          path: artifacts/

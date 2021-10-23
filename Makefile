@@ -24,4 +24,4 @@ tests: setup artifacts
 
 coverage: setup
 	-rm -rf .coverage
-	${IN_VENV} ${PYTHON} test_fontcontrols.py -v --with-coverage --cover-html --cover-package control
+	${IN_VENV} ${PYTHON} test_fontcontrols.py -v --with-coverage --cover-html --cover-package control --cover-html-dir artifacts/coverage-report --cover-xml --cover-xml-file artifacts/coverage.xml
