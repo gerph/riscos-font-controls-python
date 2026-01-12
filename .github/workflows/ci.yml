@@ -20,7 +20,7 @@ jobs:
   test-python2and3:
     # The type of runner that the job will run on
     runs-on: ubuntu-24.04
-    container: ubuntu:20.04
+    container: ubuntu:24.04
     timeout-minutes: 20
 
     steps:
