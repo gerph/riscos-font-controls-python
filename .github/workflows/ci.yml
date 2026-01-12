@@ -5,28 +5,38 @@
 name: CI
 
 # Controls when the action will run. Triggers the workflow on:
-#   * push or pull request on any branch.
-
+#   * push on any branch.
+#   * tag creation for tags beginning with a 'v'
+#   * pull requests
 on:
+  push:
+    branches: ["*"]
+    tags: ["v*"]
   pull_request:
+    types: [opened, reopened, synchronize]
     branches: ["*"]
 
 jobs:
   test-python2and3:
     # The type of runner that the job will run on
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
+    container: ubuntu:20.04
+    timeout-minutes: 20
 
     steps:
+      - name: Prerequisites
+        run: apt-get update && apt-get install -y git
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
       - name: Ensure that we have virtualenv and python 2.7/3
-        run: sudo apt-get install -y virtualenv python2.7 python3
+        run: apt-get install -y virtualenv python2.7 python3 make
 
       - name: Run the Python 2 tests
-        run: make tests PYTHON=python2
+        run: make tests PYTHON=python2.7
 
       # Python 3 tests don't work right now.
       #- name: Run the Python 3 tests
@@ -53,7 +63,7 @@ jobs:
           files: artifacts/test-*.xml
 
       - name: Upload the test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results

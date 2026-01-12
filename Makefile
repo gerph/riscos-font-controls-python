@@ -1,7 +1,7 @@
 # Makefile for testing the module.
 
 SHELL = /bin/bash
-PYTHON ?= python2
+PYTHON ?= python2.7
 VENV ?= venv-${PYTHON}
 
 IN_VENV = source "${VENV}/bin/activate" &&
