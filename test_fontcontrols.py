@@ -12,11 +12,6 @@ import os
 import sys
 import unittest
 
-try:
-    import nose
-except ImportError:
-    nose = None
-
 sys.path.append(os.path.join(os.path.dirname(__file__), 'riscos/pymods/fontmanager'))
 
 import control
@@ -505,10 +500,4 @@ class Test40Sizing(FCTestCase):
 
 if __name__ == '__main__':
     __name__ = os.path.basename(sys.argv[0][:-3])  # pylint: disable=redefined-builtin
-    if nose:
-        env = os.environ
-        env['NOSE_WITH_XUNIT'] = '1'
-        env['NOSE_VERBOSE'] = '1'
-        exit(nose.runmodule(env=env))
-    else:
-        unittest.main()
+    unittest.main()

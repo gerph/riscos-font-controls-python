@@ -4,22 +4,7 @@
 #
 
 
-test-python2:
-  stage: unittest
-  script:
-    - make tests PYTHON=python2
-  dependencies: []
-  artifacts:
-    when: always
-    paths:
-      - artifacts
-    reports:
-      junit:
-        - artifacts/test-python2.xml
-
-
-# Python 3 tests don't quite work yet
-.test-python3:
+test-python3:
   stage: unittest
   script:
     - make tests PYTHON=python3
@@ -38,8 +23,7 @@ coverage:
   script:
     - make coverage
   dependencies: []
-  #coverage: '/^Overall Coverage: (\d+(?:\.\d+)?)%.*$/'
-  coverage: '/^fontqualifiers.* (\d+(?:\.\d+)?)%.*$/'
+  coverage: '/^control.* (\d+(?:\.\d+)?)%.*$/'
 
 
 .inttest-python2:

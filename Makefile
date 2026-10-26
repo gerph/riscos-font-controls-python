@@ -1,7 +1,7 @@
 # Makefile for testing the module.
 
 SHELL = /bin/bash
-PYTHON ?= python2.7
+PYTHON ?= python3
 VENV ?= venv-${PYTHON}
 
 IN_VENV = source "${VENV}/bin/activate" &&
@@ -20,8 +20,8 @@ ${VENV}/marker:
 	touch "${VENV}/marker"
 
 tests: setup artifacts
-	${IN_VENV} ${PYTHON} test_fontcontrols.py -v --xunit-file artifacts/test-${PYTHON}.xml
+	${IN_VENV} ${PYTHON} -m pytest -v test_fontcontrols.py --junitxml artifacts/test-${PYTHON}.xml
 
-coverage: setup
+coverage: setup artifacts
 	-rm -rf .coverage
-	${IN_VENV} ${PYTHON} test_fontcontrols.py -v --with-coverage --cover-html --cover-package control --cover-html-dir artifacts/coverage-report --cover-xml --cover-xml-file artifacts/coverage.xml
+	${IN_VENV} ${PYTHON} -m pytest -v test_fontcontrols.py --cov control --cov-report term --cov-report html:artifacts/coverage-report --cov-report xml:artifacts/coverage.xml

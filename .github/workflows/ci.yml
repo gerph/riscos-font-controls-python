@@ -17,7 +17,7 @@ on:
     branches: ["*"]
 
 jobs:
-  test-python2and3:
+  test-python3:
     # The type of runner that the job will run on
     runs-on: ubuntu-26.04
     container: ubuntu:26.04
@@ -32,15 +32,11 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Ensure that we have virtualenv and python 2.7/3
-        run: apt-get install -y virtualenv python2.7 python3 make
+      - name: Ensure that we have virtualenv and python 3
+        run: apt-get install -y virtualenv python3 make
 
-      - name: Run the Python 2 tests
-        run: make tests PYTHON=python2.7
-
-      # Python 3 tests don't work right now.
-      #- name: Run the Python 3 tests
-      #  run: make tests PYTHON=python3
+      - name: Run the Python 3 tests
+        run: make tests PYTHON=python3
 
       - name: Report on the coverage
         run: make coverage
