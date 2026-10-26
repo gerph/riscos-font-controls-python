@@ -833,7 +833,7 @@ class FontControlSequence(object):
                             yield FontControlMoveSpace(self.ro, (indexes[1], indexes[1]),
                                                        dx=spacing.word_xoffset, dy=spacing.word_yoffset)
                     else:
-                        if s[-1] == b' ':
+                        if s[-1:] == b' ':
                             yield FontControlMoveSpace(self.ro, (indexes[1], indexes[1]),
                                                        dx=spacing.word_xoffset, dy=spacing.word_yoffset)
                     offset += size
